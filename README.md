@@ -69,3 +69,5 @@ embedding2 = model(audio_input2).last_hidden_state.mean(dim=1)
 similarity = F.cosine_similarity(embedding1, embedding2).item()
 print(f"Similarity between the two audio files: {similarity}")
 ```
+
+Threshold: 0.3331 is Youden's J statistic optimal threshold

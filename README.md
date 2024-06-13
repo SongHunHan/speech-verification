@@ -20,7 +20,9 @@
 python train.py --config config/wav2vec.yaml
 ```
 
-<img src="./images/tsne_3d_visualization_show_result.png" alt="Result Visualization Image" width="400">
+<p align="center">
+  <img src="./images/tsne_3d_visualization_show_result.png" alt="Result Visualization Image" width="500">
+</p>
 
 화자들의 임베딩이 잘 뭉쳐짐을 확인
 

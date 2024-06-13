@@ -20,7 +20,7 @@
 python train.py --config config/wav2vec.yaml
 ```
 
-![Result Visualization Image](images/tsne_3d_visualization_show_result.jpg)
+![Result Visualization Image](./images/tsne_3d_visualization_show_result.png)
 화자들의 임베딩이 잘 뭉쳐짐을 확인
 
 학습된 모델은 finetuned_model 폴더에 생성됩니다.

@@ -1,6 +1,6 @@
 # Speech Verification Repository
 
-이 저장소는 음성 데이터를 기반으로 화자 인식 모델을 학습하고 사용하는 방법을 제공합니다. 한국어 음성 데이터셋인 AIHub의 화자 인식용 음성 데이터셋을 사용하여 학습을 진행했습니다.
+음성 데이터를 기반으로 화자 인식 모델을 학습하고 사용하는 방법을 제공합니다. 한국어 음성 데이터셋인 AIHub의 화자 인식용 음성 데이터셋을 사용하여 학습을 진행했습니다.
 
 ## 데이터셋
 
@@ -24,7 +24,7 @@ python train.py --config config/wav2vec.yaml
   <img src="./images/tsne_3d_visualization_show_result.png" alt="Result Visualization Image" width="500">
 </p>
 
-화자들의 임베딩이 잘 뭉쳐짐을 확인
+(동일 화자들의 임베딩끼리 뭉쳐짐)
 
 학습된 모델은 finetuned_model 폴더에 생성됩니다.
 

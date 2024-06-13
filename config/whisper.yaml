@@ -1,0 +1,25 @@
+dataset_name: 'VoiceDatasetWhisper'
+model_name: 'openai/whisper-small'
+loss_function: 'FocalInfoNCE'
+        
+is_amp: true
+
+wandb:
+    use: true
+    project_name: 'whisper_contrastive_learning'
+    run_name: 'whisper_encoder'
+
+num_workers: 16
+epochs: 3
+batch_size: 1
+learning_rate: 0.00003
+warmup_steps_rate: 10
+seed_number: 42
+
+max_input_length: 4.0
+log_interval: 100
+
+data_path:
+    train: '/workspace/ssd/AI_hub/speech_recognition/dataset/train.txt'
+    valid: '/workspace/ssd/AI_hub/speech_recognition/dataset/valid.txt'
+    test: '/workspace/ssd/AI_hub/speech_recognition/dataset/test.txt'

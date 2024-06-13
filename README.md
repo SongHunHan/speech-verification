@@ -16,8 +16,50 @@
 
 3. 다음 명령어를 실행하여 모델을 학습합니다:
 
+```shell
 python train.py --config config/wav2vec.yaml
-
-
+```
 학습된 모델은 finetuned_model 폴더에 생성됩니다.
 
+## 음성 유사도 비교
+import library
+```shell
+import torch
+import torch.nn.functional as F
+from transformers import Wav2Vec2Model
+import librosa
+from transformers import Wav2Vec2FeatureExtractor
+from torch.nn.functional import cosine_similarity
+```
+
+Load finetuned Model
+```shell
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+model_name = "facebook/wav2vec2-base-960h"
+
+model = Wav2Vec2Model.from_pretrained(model_name).to(device)
+model.load_state_dict(torch.load("../VoiceAuth-AI/finetuned_model/wav2vecModel_wav2vec2-base-960h/best_model.pth"))
+model.eval()
+```
+
+Calculate Voice Similarity
+```shell
+file_path1 = './sample_data/voice1.mp3'
+file_path2 = './sample_data/voice2.mp3'
+
+feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(model_name)
+def load_and_process_audio(file_path, feature_extractor, max_length=4.0):
+    audio, sampling_rate = librosa.load(file_path, sr=16000)
+    inputs = feature_extractor(audio, sampling_rate=sampling_rate, return_tensors="pt", padding="max_length", truncation=True, max_length=int(max_length * sampling_rate))
+    return inputs.input_values.to(device)
+
+audio_input1 = load_and_process_audio(file_path1, feature_extractor)
+audio_input2 = load_and_process_audio(file_path2, feature_extractor)
+
+embedding1 = model(audio_input1).last_hidden_state.mean(dim=1)
+embedding2 = model(audio_input2).last_hidden_state.mean(dim=1)
+
+similarity = F.cosine_similarity(embedding1, embedding2).item()
+print(f"Similarity between the two audio files: {similarity}")
+```

@@ -14,7 +14,9 @@
 
 2. 학습에 필요한 하이퍼파라미터를 `config` 폴더의 해당 모델 설정 파일에서 조정합니다. 학습 에폭 수, 배치 크기, 학습률 등을 설정할 수 있습니다.
 
-3. 다음 명령어를 실행하여 모델을 학습합니다:
+- 학습 완료 모델 링크 : [Songhun/wav2vec2-base-960h-contrastive](https://huggingface.co/Songhun/wav2vec2-base-960h-contrastive)
+
+## 사용 방법
 
 ```shell
 python train.py --config config/wav2vec.yaml

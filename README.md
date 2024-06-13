@@ -31,22 +31,19 @@ python train.py --config config/wav2vec.yaml
 ## 음성 유사도 비교
 import library
 ```shell
+import librosa
 import torch
 import torch.nn.functional as F
-from transformers import Wav2Vec2Model
-import librosa
-from transformers import Wav2Vec2FeatureExtractor
+from transformers import Wav2Vec2FeatureExtractor, Wav2Vec2Model
 from torch.nn.functional import cosine_similarity
 ```
 
 Load finetuned Model
 ```shell
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-model_name = "facebook/wav2vec2-base-960h"
-
+model_name = "Songhun/wav2vec2-base-960h-contrastive"
 model = Wav2Vec2Model.from_pretrained(model_name).to(device)
-model.load_state_dict(torch.load("../VoiceAuth-AI/finetuned_model/wav2vecModel_wav2vec2-base-960h/best_model.pth"))
+feature_extractor = AutoFeatureExtractor.from_pretrained(model_name)
 model.eval()
 ```
 

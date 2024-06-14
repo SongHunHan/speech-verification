@@ -18,8 +18,8 @@
 
 | Model Name | ROC AUC | Accuracy | inference time(sec) | Best Threshold | Link |
 |------------|---------|----------|---------------------|----------------|------|
-| Songhun/wav2vec2-base-960h-contrastive | 0.9746 | 0.9324 | 0.0046 | 0.3331 | [Link](https://huggingface.co/Songhun/wav2vec2-base-960h-contrastive) |
-| Songhun/wav2vec2-large-960h-lv60-contrastive | 0.9819 | 0.9372 | 0.01 | 0.3728 | [Link](https://huggingface.co/Songhun/wav2vec2-large-960h-contrastive) |
+| wav2vec2-base-960h-contrastive | 0.9746 | 0.9324 | 0.0046 | 0.3331 | [Link](https://huggingface.co/Songhun/wav2vec2-base-960h-contrastive) |
+| wav2vec2-large-960h-lv60-contrastive | 0.9819 | 0.9372 | 0.01 | 0.3728 | [Link](https://huggingface.co/Songhun/wav2vec2-large-960h-contrastive) |
 
 
 ## 사용 방법

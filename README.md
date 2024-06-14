@@ -14,7 +14,13 @@
 
 2. 학습에 필요한 하이퍼파라미터를 `config` 폴더의 해당 모델 설정 파일에서 조정합니다. 학습 에폭 수, 배치 크기, 학습률 등을 설정할 수 있습니다.
 
-- 학습 완료 모델 링크 : [Songhun/wav2vec2-base-960h-contrastive](https://huggingface.co/Songhun/wav2vec2-base-960h-contrastive)
+## 학습 완료 모델
+
+| Model Name | ROC AUC | Accuracy | inference time | Best Threshold | Link |
+|------------|---------|----------|----------------|----------------|------|
+| Songhun/wav2vec2-base-960h-contrastive | 0.9746 | 0.9324 | 0.0046 | 0.3331 | [Link](https://huggingface.co/Songhun/wav2vec2-base-960h-contrastive) |
+| Songhun/wav2vec2-large-960h-lv60-contrastive | 0.9819 | 0.9372 | 0.01 | 0.3728 | [Link](https://huggingface.co/Songhun/wav2vec2-large-960h-contrastive) |
+
 
 ## 사용 방법
 

@@ -10,7 +10,7 @@
 
 ## 모델 학습
 
-1. 데이터셋을 준비합니다. AIHub에서 화자 인식 데이터셋을 다운로드하고, 데이터셋 경로를 `config` 폴더의 해당 모델 설정 파일(예: `wav2vec.yaml`)에 지정합니다.
+1. 데이터셋을 준비합니다. AIHub에서 화자 인식 데이터셋을 다운로드하고, 데이터셋 경로를 `config` 폴더의 해당 모델 설정 파일(예: `wav2vec.yaml`, `whisper.yaml`)에 지정합니다.
 
 2. 학습에 필요한 하이퍼파라미터를 `config` 폴더의 해당 모델 설정 파일에서 조정합니다. 학습 에폭 수, 배치 크기, 학습률 등을 설정할 수 있습니다.
 
@@ -18,8 +18,8 @@
 
 | Model Name | ROC AUC | Accuracy | inference time(sec) | Best Threshold | Link |
 |------------|---------|----------|---------------------|----------------|------|
-| wav2vec2-base-960h-contrastive | 0.9746 | 0.9324 | 0.0046 | 0.3331 | [Link](https://huggingface.co/Songhun/wav2vec2-base-960h-contrastive) |
-| wav2vec2-large-960h-lv60-contrastive | 0.9819 | 0.9372 | 0.01 | 0.3728 | [Link](https://huggingface.co/Songhun/wav2vec2-large-960h-lv60-contrastive) |
+| wav2vec2-base-960h-contrastive | 0.9746 | 0.9324 | **0.0046** | 0.3331 | [Link](https://huggingface.co/Songhun/wav2vec2-base-960h-contrastive) |
+| wav2vec2-large-960h-lv60-contrastive | **0.9819** | **0.9372** | 0.01 | 0.3728 | [Link](https://huggingface.co/Songhun/wav2vec2-large-960h-lv60-contrastive) |
 
 
 ## 사용 방법

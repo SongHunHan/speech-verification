@@ -49,6 +49,8 @@ class ContrastWav2Vec2Model(Wav2Vec2PreTrainedModel):
         self.tdnn_layers = nn.ModuleList([
             TDNNLayer(config, layer_id=i) for i in range(len(config.tdnn_dim))
         ])
+        
+        self.init_weights()
 
     def forward(
         self,

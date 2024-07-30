@@ -10,6 +10,8 @@ class ContrastWav2Vec2Model(Wav2Vec2PreTrainedModel):
     def __init__(self, config: Wav2Vec2Config):
         super().__init__(config)
         self.wav2vec2 = Wav2Vec2Model(config)
+        
+        self.init_weights()
 
     def forward(
         self,

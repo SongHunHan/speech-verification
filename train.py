@@ -177,6 +177,7 @@ def main():
     logger.watch(model)
     
     # best_val_loss = float('inf')
+    save_list = [] 
     
     for epoch in range(config['epochs']):
         train_avg_loss = train_epoch(model, train_dataloader, loss_fn, optimizer, epoch, scaler, scheduler, logger, device, config)
@@ -184,9 +185,13 @@ def main():
 
         torch.save(model.state_dict(), f"{save_path}/best_model_{epoch}.pth")
         print(f"Model saved at epoch {epoch+1} with validation loss: {val_avg_loss:.4f}")
+        save_list.append((val_avg_loss, roc_auc, best_threshold, f1))
 
     logger.finish()
     
+    with open(f"{save_path}/result.txt", 'w') as f:
+        for metrics in save_list:
+            f.write(f'{metrics}\n')
     
 if __name__ == "__main__":
     main()

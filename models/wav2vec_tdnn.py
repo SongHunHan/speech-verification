@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 
 from transformers import Wav2Vec2Model, Wav2Vec2PreTrainedModel, Wav2Vec2Config
-from transformers.models.wav2vec2.modeling_wav2vec2 import Wav2Vec2BaseModelOutput
+from transformers.models.wav2vec2.modeling_wav2vec2 import Wav2Vec2BaseModelOutput, XVectorOutput
 from transformers.utils import is_peft_available
 
 class TDNNLayer(nn.Module):
@@ -41,16 +41,20 @@ class ContrastWav2Vec2Model(Wav2Vec2PreTrainedModel):
     def __init__(self, config: Wav2Vec2Config):
         super().__init__(config)
         self.wav2vec2 = Wav2Vec2Model(config)
-        self.projection = nn.Linear(config.hidden_size, 512)
+        self.projection = nn.Linear(config.hidden_size, config.tdnn_dim[0])
         
-        # Modify TDNN configuration to start with 512 dimensions
-        config.tdnn_dim = [512] + config.tdnn_dim[1:]
-        
-        self.tdnn_layers = nn.ModuleList([
-            TDNNLayer(config, layer_id=i) for i in range(len(config.tdnn_dim))
-        ])
+        # TDNN layers
+        tdnn_layers = [TDNNLayer(config, i) for i in range(len(config.tdnn_dim))]
+        self.tdnn = nn.ModuleList(tdnn_layers)
         
         self.init_weights()
+        
+    def freeze_feature_encoder(self):
+        self.wav2vec2.feature_extractor._freeze_parameters()
+
+    def freeze_base_model(self):
+        for param in self.wav2vec2.parameters():
+            param.requires_grad = False
 
     def forward(
         self,
@@ -62,49 +66,34 @@ class ContrastWav2Vec2Model(Wav2Vec2PreTrainedModel):
         return_dict: Optional[bool] = None,
     ) -> Union[Tuple, Wav2Vec2BaseModelOutput]:
         
-        output_attentions = output_attentions if output_attentions is not None else self.config.output_attentions
-        output_hidden_states = output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
+        output_hidden_states = True if self.config.use_weighted_layer_sum else output_hidden_states
 
-        extract_features = self.wav2vec2.feature_extractor(input_values.float())  # Ensure float32 type here
-        extract_features = extract_features.transpose(1, 2)
-
-        if attention_mask is not None:
-            attention_mask = self.wav2vec2._get_feature_vector_attention_mask(
-                extract_features.shape[1], attention_mask, add_adapter=False
-            )
-
-        hidden_states, extract_features = self.wav2vec2.feature_projection(extract_features)
-        hidden_states = self.wav2vec2._mask_hidden_states(
-            hidden_states, mask_time_indices=mask_time_indices, attention_mask=attention_mask
-        )
-
-        encoder_outputs = self.wav2vec2.encoder(
-            hidden_states,
+        outputs = self.wav2vec2(
+            input_values,
             attention_mask=attention_mask,
             output_attentions=output_attentions,
             output_hidden_states=output_hidden_states,
             return_dict=return_dict,
         )
 
-        hidden_states = encoder_outputs[0]
-
+        hidden_states = outputs[0]
         if self.wav2vec2.adapter is not None:
             hidden_states = self.wav2vec2.adapter(hidden_states)
-            
+
+        # Project to TDNN input dimension
         hidden_states = self.projection(hidden_states)
-        
-        for tdnn_layer in self.tdnn_layers:
+
+        # Apply TDNN layers
+        for tdnn_layer in self.tdnn:
             hidden_states = tdnn_layer(hidden_states)
 
         if not return_dict:
-            return_value = (hidden_states, extract_features) + encoder_outputs[1:]
-            return return_value[0]
-            # return 
+            return (hidden_states,) + outputs[1:]
 
         return Wav2Vec2BaseModelOutput(
             last_hidden_state=hidden_states,
-            extract_features=extract_features,
-            hidden_states=encoder_outputs.hidden_states,
-            attentions=encoder_outputs.attentions,
+            extract_features=outputs.extract_features if hasattr(outputs, 'extract_features') else None,
+            hidden_states=outputs.hidden_states,
+            attentions=outputs.attentions,
         )

@@ -176,16 +176,14 @@ def main():
     logger = CustomLogger(config=config)
     logger.watch(model)
     
-    best_val_loss = float('inf')
+    # best_val_loss = float('inf')
     
     for epoch in range(config['epochs']):
         train_avg_loss = train_epoch(model, train_dataloader, loss_fn, optimizer, epoch, scaler, scheduler, logger, device, config)
         val_avg_loss, roc_auc, best_threshold, f1 = valid_epoch(model, valid_dataloader, loss_fn, optimizer, epoch, logger, device, config)
 
-        if val_avg_loss < best_val_loss:
-            best_val_loss = val_avg_loss
-            torch.save(model.state_dict(), f"{save_path}/best_model_{epoch}.pth")
-            print(f"Model saved at epoch {epoch+1} with validation loss: {val_avg_loss:.4f}")
+        torch.save(model.state_dict(), f"{save_path}/best_model_{epoch}.pth")
+        print(f"Model saved at epoch {epoch+1} with validation loss: {val_avg_loss:.4f}")
 
     logger.finish()
     
